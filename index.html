@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" defer src="./script.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.15.4/css/solid.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css"
+/>
+    <title>Document</title>
+</head>
+<body>
+  <form class="wrapper" autocomplete="off">
+    <input type="text" name="id" placeholder="id" required />
+    <input type="text" name="title" placeholder="title" required />
+    <input
+      type="text"
+      name="createdAt"
+      placeholder="createdAt"
+      required
+    />
+    <input type="text" name="image" placeholder="URL image" required />
+    <input type="text" name="content" placeholder="content"/>
+    <button type="submit" class="form-submit">POST</button>
+  </form>
+  <div class="wrap">
+    <table class="head">
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td>Title</td>
+          <td>createdAt</td>
+          <td>Image</td>
+          <td>Content</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="scroll-table">
+      <table>
+        <tbody></tbody>
+        <tbody class="tbody-scroll">
+          <!-- <tr>
+            <td>Body 1</td>
+            <td>Body 2</td>
+            <td>Body 3</td>
+            <td>Body 3</td>
+            <td>Body 3</td>
+          </tr> -->
+        </tbody>
+        
+      </table>
+    </div>
+  </div>
+</body>
+</html>
