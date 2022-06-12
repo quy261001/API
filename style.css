@@ -136,3 +136,33 @@ table tr td ol {
 .source-edit i {
   pointer-events: none;
 }
+.btn-page {
+  display:  flex;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  padding-top: 20px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.active {
+  background-color: rgb(30, 175, 204);
+}
+.btn-page-item {
+  padding: 5px 10px;
+  color:#000  ;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-page-item a {
+  color: #000;
+}
+.number-page {
+  display: flex;
+  gap: 15px;
+  overflow: hidden;
+}
+.activeFilter {
+  opacity: 0.3;
+}

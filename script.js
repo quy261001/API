@@ -1,12 +1,12 @@
-const url = "https://617b71c2d842cf001711bed9.mockapi.io/api/v1/asdsa";
+const url = "https://617b71c2d842cf001711bed9.mockapi.io/api/v1/blogs";
 const wrapper = document.querySelector(".wrapper");
 const sourceList = document.querySelector(".source-list");
 const tbodyScroll = document.querySelector(".tbody-scroll");
 const formSubmit = document.querySelector(".form-submit");
 let updateId = null;
 async function addPost({ id, title, createdAt, image, content }) {
-  //dang lam
-  let response = await fetch(url, {
+  try {
+    let response = await fetch(url, {
       method: "POST",
       body: JSON.stringify({
         id,
@@ -19,30 +19,123 @@ async function addPost({ id, title, createdAt, image, content }) {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
-    if(response && response.status !== 200) {
-      throw new Error('k the ket noi !' + response.status)
+    if (response && response.status !== 200) {
+     throw new Error("POST loi:", response.status)
     }
     let data = await response.json();
-    return data
+    return data;
+  }catch(err) {
+    console.log(err, err.message)
+  }
     // .then((response) => response.json())
     // .then((json) => console.log(json));
   }
-  // dang lam
-  addPost().then(data => {
-    console.log('check data:', data)
-  })
-    .catch(err => {
-      console.log("check:", err.message)
-    });
-
+//Render
+let perPage = 25;
+let currentPage = 1;
+let start = 0;
+let end = perPage
+const btnNext = document.querySelector(".btn-next")
+const btnPrev = document.querySelector(".btn-prev")
+const currentPages = document.querySelectorAll('.number-page li');
+function getCurrentPage(currentPage) {
+  start = (currentPage - 1) * perPage;
+  end = currentPage * perPage
+}
 async function getSource() {
-  const response = await fetch(url);
-  const data = await response.json();
-  if (data.length > 0 && Array.isArray(data)) {
-    data.forEach((item) => renderSource(item));
-  }
+ try {
+   const response = await fetch(url);
+   if (response && response.status !== 200) {
+     throw new Error ("something Wrongs get source:" + response.status)
+   }
+   const data = await response.json(); 
+   const product = [...data]
+   console.log(product);
+   let html = '';
+   const content = product.map((item, index) => {
+     if(index >= start && index < end) { 
+       html += '<tr class="trbody">'
+       html += '<td>' + item.id + '</td>'
+       html += '<td>' + item.title + '</td>'
+       html += '<td>' + new Date(item.createdAt).toLocaleString() + '</td>'
+       html += '<td>' + item.image + '</td>'
+       html += '<td>' + item.content
+       html += '<button class="source-edit" data-id =' + item.id +'> <i class="fa fa-list-alt"></i></button>' 
+       html += '<button class="source-remove" data-id =' + item.id + '><i class="fa fa-times"></i></button>'
+       html += '</td>'
+       html += '</tr>'   
+       return html;     
+     }
+     document.getElementById("product").innerHTML = html;
+   })
+ }catch(err) {
+   console.log(err, err.message)
+}
 }
 getSource();
+
+async function getClick() {
+ const response = await fetch(url);
+ const data = await response.json(); 
+ var totalPages = Math.ceil(data.length / perPage)
+ btnNext.addEventListener("click", () => {
+   currentPage++;
+   if(currentPage > totalPages) {
+       currentPage = totalPages;
+   }
+   if(currentPage === totalPages) {
+    btnNext.classList.add("activeFilter")
+  }
+    btnPrev.classList.remove("activeFilter")
+    currentPages.forEach(item => {
+      (item).classList.add("active");
+    })
+   getCurrentPage(currentPage)
+   getSource();
+})
+
+btnPrev.addEventListener("click", () => {
+   currentPage--;
+   if(currentPage <= 1) {
+       currentPage = 1;
+   }
+   if(currentPage === 1) {
+    btnPrev.classList.add("activeFilter")
+   }
+    btnNext.classList.remove("activeFilter")
+    currentPages.forEach(item => {
+      (item).classList.add("active");
+    })
+   getCurrentPage(currentPage)
+   getSource();
+})
+}
+getClick();
+
+async function renderListPage() {
+  let response = await fetch(url);
+  let data = await response.json();
+  var totalPages = Math.ceil(data.length / perPage)
+  let html = '';
+  html += `<li class="btn-page-item active"><a href="#">${1}</a></li>`;
+  for(let i = 2; i <= totalPages; i++) {
+   html += `<li class="btn-page-item"><a href="#">${i}</a></li>`
+  }
+  document.getElementById('number-page').innerHTML = html;
+  console.log(currentPage);
+  for(let i=0 ; i < currentPages.length; i++) {
+    currentPages[i].addEventListener("click", () => {
+      const value = i;
+      currentPage = value;
+      currentPages.forEach(item => item.classList.remove('active'))
+      currentPages[i].classList.add('active')
+      start = (currentPage - 1) * perPage;
+      end = currentPage * perPage
+      getSource();
+    })
+  }
+}
+renderListPage();
 
 wrapper.addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -57,14 +150,21 @@ wrapper.addEventListener("submit", async function (e) {
   this.reset();
   await getSource();
 });
-
 //Delete
 async function deleteSource(id) {
-  await fetch(`${url}/${id}`, {
-    method: "DELETE",
-  });
+  try {
+      let response = await fetch(`${url}/${id}`, {
+        method: "DELETE",
+      });
+      if ( response && response.status !== 200) {
+        throw new Error("loi delete:", response.status)
+      }   
+      let data = await response.json();
+      return data;
+  } catch(err) {
+    console.log("Loi delete:", err.message);
+  }
 }
-
 async function getSingleSource(id) {
   const response = await fetch(`${url}/${id}`);
   const data = await response.json(); 
@@ -105,22 +205,4 @@ tbodyScroll.addEventListener("click", async function (e) {
       "Content-type": "application/json; charset=UTF-8",
     },
   })
-}
-
-// Render
-function renderSource(item) {
-  const template = ` 
-  <tr class="trbody">
-  <td>${item.id}</td>
-  <td>${item.title}</td>
-  <td>${new Date(item.createdAt).toLocaleString()}</td>
-  <td>${item.image}</td>
-  <td>
-  ${item.content}
-  <button class="source-edit" data-id = ${item.id }><i class="fa fa-list-alt"></i></button>
-  <button class="source-remove" data-id = ${item.id }><i class="fa fa-times"></i></button>
-  </td>
-</tr>
-  `;
-  tbodyScroll.insertAdjacentHTML("beforeend", template);
 }

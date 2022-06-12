@@ -1,0 +1,72 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  line-height: 1.5;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  outline: none;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+.wrap-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 1170px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+.btn-page {
+    display:  flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    color: aqua;
+    padding-top: 20px;
+  }
+  .active {
+    background-color: rgb(59, 113, 59);
+  }
+  .btn-page-item {
+    padding: 5px 10px;
+    color:red;
+    border: 1px solid #ccc;
+   
+    cursor: pointer;
+  }
+  .btn-page-item a {
+    color: red;
+  }
